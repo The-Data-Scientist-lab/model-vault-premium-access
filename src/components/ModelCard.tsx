@@ -19,14 +19,14 @@ const ModelCard = ({ id, name, theme, rating, orders, successRate, image, slug }
   return (
     <Link 
       to={`/model/${slug}`}
-      className="group relative flex flex-col bg-card rounded-lg overflow-hidden shadow-md card-hover"
+      className="group relative flex flex-col bg-card rounded-lg overflow-hidden shadow-md h-full card-hover"
     >
       <div className="relative overflow-hidden aspect-[3/4] w-full">
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10" />
         <img 
           src={image} 
           alt={name} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500"
         />
         <Badge 
           className="absolute top-3 right-3 bg-theme-accent text-theme-dark font-semibold z-20"
