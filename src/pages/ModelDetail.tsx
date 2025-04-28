@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import ModelStats from '@/components/ModelStats';
 import PriceCard from '@/components/PriceCard';
 import { useIsMobile } from '@/hooks/use-mobile';
+import ModelDetailStats from '@/components/ModelDetailStats';
 
 // Mock data - in a real app, this would come from an API
 const modelData = {
@@ -136,7 +135,6 @@ const modelData = {
       },
     ],
   },
-  // Add more models here with similar structure
   'miss-pinky': {
     id: '2',
     name: 'Miss Pinky (Sana)',
@@ -153,10 +151,8 @@ const modelData = {
       'Regular updates with new material',
     ],
     indianPlans: [
-      // Same plan structure as above
     ],
     internationalPlans: [
-      // Same plan structure as above
     ],
   },
   'shanaya-katiyan': {
@@ -175,10 +171,8 @@ const modelData = {
       'Regular updates with new material',
     ],
     indianPlans: [
-      // Same plan structure as above
     ],
     internationalPlans: [
-      // Same plan structure as above
     ],
   },
 };
@@ -187,7 +181,6 @@ const ModelDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const isMobile = useIsMobile();
   
-  // Check if model exists in our data
   if (!slug || !modelData[slug as keyof typeof modelData]) {
     return (
       <Layout>
@@ -200,12 +193,22 @@ const ModelDetail = () => {
   }
   
   const model = modelData[slug as keyof typeof modelData];
+
+  // Sample monthly orders data
+  const monthlyOrders = [
+    { name: 'Jan', orders: 65 },
+    { name: 'Feb', orders: 85 },
+    { name: 'Mar', orders: 73 },
+    { name: 'Apr', orders: 92 },
+    { name: 'May', orders: 78 },
+    { name: 'Jun', orders: 95 }
+  ];
   
   return (
     <Layout>
       <div className="container mx-auto p-4 py-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {/* Model Image and Info */}
+          {/* Model Image */}
           <div className="md:col-span-1">
             <div className="space-y-6">
               <div className="overflow-hidden rounded-lg aspect-[3/4]">
@@ -215,12 +218,6 @@ const ModelDetail = () => {
                   className="w-full h-full object-cover"
                 />
               </div>
-              
-              <ModelStats 
-                rating={model.rating} 
-                orders={model.orders} 
-                successRate={model.successRate}
-              />
             </div>
           </div>
           
@@ -231,42 +228,33 @@ const ModelDetail = () => {
               <p className="text-muted-foreground mb-4">{model.theme}</p>
               <p className="mb-6">{model.description}</p>
               
-              <div className="space-y-2 mb-8">
-                <h3 className="font-medium">Features:</h3>
-                <ul className="space-y-1">
-                  {model.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <span className="text-theme-primary mr-2">•</span>
-                      <span>{feature}</span>
-                    </li>
+              <ModelDetailStats
+                views={15000}
+                orders={model.orders}
+                activeOrders={Math.floor(model.orders * 0.4)}
+                ranking={3}
+                successRate={model.successRate}
+                monthlyOrders={monthlyOrders}
+              />
+
+              <div className="mt-8">
+                <h2 className="text-2xl font-bold mb-6">Choose Your Plan</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {model.indianPlans.map((plan) => (
+                    <PriceCard 
+                      key={plan.id}
+                      id={plan.id}
+                      title={plan.title}
+                      price={plan.price}
+                      features={plan.features}
+                      isPopular={plan.isPopular}
+                      modelId={model.id}
+                      platformFee={12}
+                      usdPlatformFee={3}
+                    />
                   ))}
-                </ul>
+                </div>
               </div>
-            </div>
-            
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Choose Your Plan</h2>
-              
-              {/* Plans Section - Display in a responsive grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {model.indianPlans.map((plan) => (
-                  <PriceCard 
-                    key={plan.id}
-                    id={plan.id}
-                    title={plan.title}
-                    price={plan.price}
-                    features={plan.features}
-                    isPopular={plan.isPopular}
-                    modelId={model.id}
-                    platformFee={12}
-                    usdPlatformFee={3}
-                  />
-                ))}
-              </div>
-              
-              <p className="text-center text-sm text-muted-foreground mt-4">
-                All plans include instant access and 4K quality content
-              </p>
             </div>
           </div>
         </div>
