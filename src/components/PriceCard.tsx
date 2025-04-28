@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
@@ -91,8 +92,8 @@ const PriceCard = ({
 
   return (
     <>
-      <div className={`flex flex-col p-6 rounded-lg shadow-md bg-card h-full transition-all duration-300 
-        ${isPopular ? 'border-2 border-theme-primary scale-105 relative shadow-xl shadow-theme-primary/20' : 'border border-border hover:border-theme-primary/50'}`
+      <div className={`flex flex-col p-4 md:p-6 rounded-lg shadow-md bg-card h-full transition-all duration-300 soft-shadow
+        ${isPopular ? 'border-2 border-theme-primary scale-[1.02] md:scale-105 relative' : 'border border-border hover:border-theme-primary/50'}`
       }>
         {isPopular && (
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-theme-primary text-white text-xs font-bold uppercase py-1 px-4 rounded-full">
@@ -100,20 +101,20 @@ const PriceCard = ({
           </div>
         )}
         
-        <h3 className="text-xl font-bold">{title}</h3>
+        <h3 className="text-lg md:text-xl font-bold mt-2">{title}</h3>
         
-        <div className="mt-4 mb-6">
-          <span className="text-3xl font-bold">₹{price}</span>
-          <div className="text-sm text-muted-foreground mt-1">
+        <div className="mt-3 md:mt-4 mb-4 md:mb-6">
+          <span className="text-2xl md:text-3xl font-bold">₹{price}</span>
+          <div className="text-xs md:text-sm text-muted-foreground mt-1">
             (USD ${getUsdPrice(id)})
           </div>
         </div>
         
-        <ul className="space-y-3 mb-8 flex-grow">
+        <ul className="space-y-2 md:space-y-3 mb-6 md:mb-8 flex-grow">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start">
-              <Check className="h-5 w-5 text-theme-primary mr-2 shrink-0" />
-              <span className="text-sm">{feature}</span>
+              <Check className="h-4 w-4 md:h-5 md:w-5 text-theme-primary mr-2 shrink-0 mt-0.5" />
+              <span className="text-xs md:text-sm">{feature}</span>
             </li>
           ))}
         </ul>
@@ -121,7 +122,7 @@ const PriceCard = ({
         <div className="mt-auto">
           <Button 
             onClick={handleSelectPlan}
-            className={`${isPopular ? 'bg-theme-primary hover:bg-theme-primary/90' : 'bg-secondary hover:bg-secondary/80'} w-full`}
+            className={`${isPopular ? 'bg-theme-primary hover:bg-theme-primary/90' : 'bg-secondary hover:bg-secondary/80 text-foreground'} w-full`}
           >
             Get Access Now
           </Button>
@@ -135,7 +136,7 @@ const PriceCard = ({
       />
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-sm md:max-w-md mx-auto">
           <DialogHeader>
             <DialogTitle>Confirm Your Selection</DialogTitle>
             <DialogDescription>

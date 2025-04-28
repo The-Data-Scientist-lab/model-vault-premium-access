@@ -12,29 +12,33 @@ interface CountrySelectionDialogProps {
 const CountrySelectionDialog = ({ isOpen, onClose, onSelectCountry }: CountrySelectionDialogProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-xs sm:max-w-md mx-auto">
         <DialogHeader>
           <DialogTitle>Select Your Region</DialogTitle>
           <DialogDescription>
             Choose your region to see relevant payment options and pricing
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
           <Button
             variant="outline"
-            className="flex flex-col items-center gap-2 h-auto py-4 hover:border-theme-primary hover:bg-theme-primary/5"
+            className="flex flex-col items-center gap-2 h-auto py-4 hover:border-theme-primary hover:bg-theme-primary/5 transition-all soft-shadow"
             onClick={() => onSelectCountry('india')}
           >
-            <IndianRupee className="h-8 w-8" />
+            <div className="bg-theme-primary/10 p-2 rounded-full">
+              <IndianRupee className="h-6 w-6 md:h-8 md:w-8 text-theme-primary" />
+            </div>
             <span className="font-medium">India</span>
             <span className="text-xs text-muted-foreground">UPI Payment</span>
           </Button>
           <Button
             variant="outline"
-            className="flex flex-col items-center gap-2 h-auto py-4 hover:border-theme-primary hover:bg-theme-primary/5"
+            className="flex flex-col items-center gap-2 h-auto py-4 hover:border-theme-primary hover:bg-theme-primary/5 transition-all soft-shadow"
             onClick={() => onSelectCountry('international')}
           >
-            <Currency className="h-8 w-8" />
+            <div className="bg-theme-primary/10 p-2 rounded-full">
+              <Currency className="h-6 w-6 md:h-8 md:w-8 text-theme-primary" />
+            </div>
             <span className="font-medium">International</span>
             <span className="text-xs text-muted-foreground">Binance Payment</span>
           </Button>

@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222 47% 11%;
     
     --card: 0 0% 100%;
@@ -60,5 +60,17 @@
   
   .card-hover {
     @apply transition-all duration-300 hover:shadow-lg hover:shadow-theme-primary/20 hover:scale-[1.02];
+  }
+  
+  .soft-shadow {
+    @apply shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)];
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-card to-secondary/80 backdrop-blur-sm;
+  }
+  
+  .section-padding {
+    @apply py-6 md:py-12 px-4 md:px-6;
   }
 }

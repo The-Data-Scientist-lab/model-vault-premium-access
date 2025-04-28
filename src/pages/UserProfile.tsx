@@ -29,15 +29,15 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 py-8">
+    <div className="container mx-auto p-4 py-6 md:py-8">
       <h1 className="text-2xl md:text-3xl font-bold mb-6">My Profile</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
-          <Card>
+          <Card className="soft-shadow">
             <CardHeader>
               <div className="flex flex-col items-center">
-                <Avatar className="h-24 w-24 mb-4">
+                <Avatar className="h-20 w-20 md:h-24 md:w-24 mb-4">
                   <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user?.name || 'User'}`} />
                   <AvatarFallback>{(user?.name || 'U')[0]}</AvatarFallback>
                 </Avatar>
@@ -110,7 +110,7 @@ const UserProfile = () => {
             </TabsList>
             
             <TabsContent value="purchases" className="mt-4">
-              <Card>
+              <Card className="soft-shadow">
                 <CardHeader>
                   <CardTitle>Your Purchases</CardTitle>
                   <CardDescription>
@@ -123,7 +123,7 @@ const UserProfile = () => {
                       {purchases.map(purchase => (
                         <div 
                           key={purchase.id} 
-                          className="border rounded-lg p-4 hover:border-theme-primary/50 transition-colors"
+                          className="border rounded-lg p-4 hover:border-theme-primary/50 transition-colors soft-shadow"
                         >
                           <div className="flex flex-wrap justify-between items-start gap-2">
                             <div>
@@ -157,7 +157,7 @@ const UserProfile = () => {
             </TabsContent>
             
             <TabsContent value="favorites" className="mt-4">
-              <Card>
+              <Card className="soft-shadow">
                 <CardHeader>
                   <CardTitle>Your Favorites</CardTitle>
                   <CardDescription>
