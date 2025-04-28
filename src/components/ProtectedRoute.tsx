@@ -1,6 +1,6 @@
 
-import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { ReactNode, useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 type ProtectedRouteProps = {
@@ -9,6 +9,11 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("Protected route check:", { isAuthenticated, path: location.pathname });
+  }, [isAuthenticated, location]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

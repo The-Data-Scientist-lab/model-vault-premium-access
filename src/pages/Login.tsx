@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -19,6 +20,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   
@@ -34,20 +36,21 @@ const Login = () => {
     setIsLoading(true);
     try {
       // In a real app, this would connect to your authentication service
-      // For now, we'll simulate a successful login/signup
       console.log("Form submitted:", data);
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("user", JSON.stringify({
+      // Use the login function from AuthContext
+      login({
         email: data.email,
         name: data.email.split('@')[0],
-      }));
+      });
       
       toast.success(isLogin ? "Login successful!" : "Account created successfully!");
-      navigate("/");
+      
+      // Force navigation to home page
+      navigate("/", { replace: true });
     } catch (error) {
       toast.error("Authentication failed. Please try again.");
     } finally {

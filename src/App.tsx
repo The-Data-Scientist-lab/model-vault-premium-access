@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import ModelDetail from "./pages/ModelDetail";
 import NotFound from "./pages/NotFound";
@@ -29,17 +30,23 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/" element={
               <ProtectedRoute>
-                <Index />
+                <Layout>
+                  <Index />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/model/:slug" element={
               <ProtectedRoute>
-                <ModelDetail />
+                <Layout>
+                  <ModelDetail />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/payment/:modelId" element={
               <ProtectedRoute>
-                <PaymentPage />
+                <Layout>
+                  <PaymentPage />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/payment/verification" element={
@@ -49,17 +56,23 @@ const App = () => (
             } />
             <Route path="/payment/failed" element={
               <ProtectedRoute>
-                <PaymentFailed />
+                <Layout>
+                  <PaymentFailed />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/refund-request" element={
               <ProtectedRoute>
-                <RefundRequest />
+                <Layout>
+                  <RefundRequest />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
               <ProtectedRoute>
-                <UserProfile />
+                <Layout>
+                  <UserProfile />
+                </Layout>
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
