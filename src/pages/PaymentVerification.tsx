@@ -2,8 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Check, Loader } from 'lucide-react';
+import { Check, ShieldCheck } from 'lucide-react';
 
 const PaymentVerification = () => {
   const [progress, setProgress] = useState(0);
@@ -53,10 +52,10 @@ const PaymentVerification = () => {
           setTimeout(() => {
             navigate('/payment/failed');
           }, 1000);
-          return 100;
+          return 100; // Ensure progress never exceeds 100
         }
         
-        const newProgress = prevProgress + 25/30; // Completes in about 30 seconds
+        const newProgress = Math.min(prevProgress + 25/30, 100); // Completes in about 30 seconds, never exceeds 100
         
         // Update steps based on progress
         if (newProgress > 20 && currentStep < 1) {
@@ -79,48 +78,50 @@ const PaymentVerification = () => {
   }, [navigate, currentStep]);
   
   return (
-    <div className="container mx-auto p-4 h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-md border border-slate-200 shadow-md bg-white">
-        <CardHeader className="text-center pb-2">
-          <CardTitle className="text-2xl text-slate-800">Verifying Your Payment</CardTitle>
-          <p className="text-slate-600 mt-1">
-            Please wait while we process your transaction
+    <div className="container mx-auto p-4 min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <Card className="w-full max-w-md border border-slate-200 shadow-lg bg-white">
+        <CardHeader className="text-center pb-4 border-b border-slate-100">
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100">
+              <ShieldCheck className="h-8 w-8 text-theme-primary" />
+            </div>
+          </div>
+          <CardTitle className="text-xl font-semibold text-slate-800">Verifying Your Payment</CardTitle>
+          <p className="text-slate-600 mt-2">
+            Please wait while we securely process your transaction
           </p>
         </CardHeader>
-        <CardContent className="space-y-6 pt-4">
-          {/* Clean, elegant progress circle */}
+        <CardContent className="space-y-6 pt-6">
+          {/* Improved progress circle - single clean circle */}
           <div className="flex justify-center my-6">
-            <div className="relative w-32 h-32">
-              {/* Simple circle with clean design */}
+            <div className="relative w-40 h-40">
+              {/* Background circle */}
               <svg className="w-full h-full" viewBox="0 0 100 100">
                 <circle 
                   className="text-slate-100" 
                   strokeWidth="8"
                   stroke="currentColor" 
                   fill="transparent" 
-                  r="42" 
+                  r="46" 
                   cx="50" 
                   cy="50" 
                 />
                 <circle 
-                  className="text-slate-700" 
+                  className="text-theme-primary transition-all duration-500 ease-in-out" 
                   strokeWidth="8" 
-                  strokeDasharray={264}
-                  strokeDashoffset={264 - (progress / 100) * 264}
+                  strokeDasharray={290}
+                  strokeDashoffset={290 - (Math.min(progress, 100) / 100) * 290}
                   strokeLinecap="round" 
                   stroke="currentColor" 
                   fill="transparent" 
-                  r="42" 
+                  r="46" 
                   cx="50" 
                   cy="50" 
                 />
               </svg>
               {/* Inner content */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                <span className="text-2xl font-bold text-slate-800">{Math.round(progress)}%</span>
-                <div className="mt-1">
-                  <Loader className="h-6 w-6 text-slate-600 animate-spin mx-auto" />
-                </div>
+                <span className="text-2xl font-bold text-slate-800">{Math.min(Math.round(progress), 100)}%</span>
               </div>
             </div>
           </div>
@@ -129,7 +130,7 @@ const PaymentVerification = () => {
             <p className="text-center text-sm italic text-slate-500 transition-opacity duration-500">{currentQuote}</p>
             
             {/* Clean verification steps with subtle animation */}
-            <div className="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-100">
+            <div className="space-y-2.5 bg-slate-50 p-4 rounded-lg border border-slate-100">
               {verificationSteps.map((step, index) => (
                 <div 
                   key={index} 
@@ -138,9 +139,9 @@ const PaymentVerification = () => {
                 >
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 transition-colors duration-500
                     ${index < currentStep 
-                      ? 'bg-slate-700 text-white' 
+                      ? 'bg-theme-primary text-white' 
                       : index === currentStep 
-                        ? 'bg-slate-500 text-white animate-pulse' 
+                        ? 'bg-slate-400 text-white animate-pulse' 
                         : 'bg-slate-200 text-slate-400'}`}>
                     {index < currentStep ? (
                       <Check className="h-4 w-4" />
@@ -162,8 +163,11 @@ const PaymentVerification = () => {
           </div>
           
           {/* Clean, simple progress bar at the bottom */}
-          <div className="mt-2">
-            <Progress value={progress} className="h-1 bg-slate-100" />
+          <div className="mt-2 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+            <div 
+              className="bg-theme-primary h-full rounded-full transition-all duration-300"
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            />
           </div>
         </CardContent>
       </Card>
