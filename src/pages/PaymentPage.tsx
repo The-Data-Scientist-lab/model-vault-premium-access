@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,9 +16,8 @@ const PaymentPage = () => {
   const isMobile = useIsMobile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'binance'>('upi');
   
-  const { planTitle, planPrice, usdPrice, platformFee, usdPlatformFee, totalAmount, usdTotalAmount, modelId } = 
+  const { planTitle, planPrice, usdPrice, platformFee, usdPlatformFee, totalAmount, usdTotalAmount, modelId, paymentCountry } = 
     location.state || { 
       planTitle: 'Basic Plan', 
       planPrice: 449, 
@@ -27,8 +26,21 @@ const PaymentPage = () => {
       usdPlatformFee: 3,
       totalAmount: 461, 
       usdTotalAmount: 10,
-      modelId: 'default-model' 
+      modelId: 'default-model',
+      paymentCountry: 'india' 
     };
+    
+  // Set default payment method based on the country selected in the previous step
+  const [paymentMethod, setPaymentMethod] = useState<'upi' | 'binance'>(paymentCountry === 'international' ? 'binance' : 'upi');
+  
+  // Set the correct tab based on country selection
+  useEffect(() => {
+    if (paymentCountry === 'international') {
+      setPaymentMethod('binance');
+    } else {
+      setPaymentMethod('upi');
+    }
+  }, [paymentCountry]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -59,10 +71,10 @@ const PaymentPage = () => {
     <div className="container mx-auto py-8 px-4 max-w-2xl">
       <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 gradient-text">Complete Your Payment</h1>
       
-      <Tabs defaultValue={paymentMethod} className="w-full" onValueChange={(value) => setPaymentMethod(value as 'upi' | 'binance')}>
+      <Tabs defaultValue={paymentMethod} value={paymentMethod} className="w-full" onValueChange={(value) => setPaymentMethod(value as 'upi' | 'binance')}>
         <TabsList className="grid w-full grid-cols-2 mb-4">
-          <TabsTrigger value="upi">Indian Payment (UPI)</TabsTrigger>
-          <TabsTrigger value="binance">International (Binance)</TabsTrigger>
+          <TabsTrigger value="upi" disabled={paymentCountry === 'international'}>Indian Payment (UPI)</TabsTrigger>
+          <TabsTrigger value="binance" disabled={paymentCountry === 'india'}>International (Binance)</TabsTrigger>
         </TabsList>
         
         <TabsContent value="upi" className="mt-6">
@@ -155,10 +167,12 @@ const PaymentPage = () => {
             <CardContent className="space-y-6 pt-6">
               <div className="flex flex-col items-center justify-center">
                 <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center mb-4 bg-card shadow-inner">
-                  {/* Placeholder for Binance QR code/details */}
-                  <div className="h-48 w-48 flex items-center justify-center bg-muted/30 rounded">
-                    <p className="text-center text-sm">Binance Payment Details</p>
-                  </div>
+                  {/* Binance QR code */}
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=binance://pay?amount=${usdTotalAmount}&currency=USDT&recipient=YourBinanceID`} 
+                    alt="Binance Payment QR Code" 
+                    className="max-w-full h-auto rounded-md" 
+                  />
                 </div>
                 <div className="bg-theme-primary/10 px-4 py-2 rounded-full">
                   <p className="text-center font-medium">Pay <span className="font-bold text-theme-primary">${usdTotalAmount}</span></p>
@@ -173,8 +187,8 @@ const PaymentPage = () => {
                   <h3 className="font-medium text-theme-primary">Payment Instructions:</h3>
                   <ol className="list-decimal list-inside space-y-1 text-sm bg-slate-50 p-4 rounded-lg border border-slate-100">
                     <li>Open your Binance app</li>
-                    <li>Enter the provided Binance details</li>
-                    <li>Enter amount: <span className="font-medium">${usdTotalAmount}</span></li>
+                    <li>Scan the QR code above</li>
+                    <li>Enter amount: <span className="font-medium">${usdTotalAmount} USDT</span></li>
                     <li>Complete payment and take a screenshot</li>
                     <li>Upload screenshot below</li>
                   </ol>

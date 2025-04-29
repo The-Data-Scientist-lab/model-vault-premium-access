@@ -22,22 +22,26 @@ const PaymentVerification = () => {
     "Almost there! We're processing your payment.",
     "Thank you for your patience. This won't take long.",
     "We're working hard to verify your transaction.",
-    "Just a few more moments to complete your purchase."
+    "Just a few more moments to complete your purchase.",
+    "Your payment is being securely verified."
   ];
   
   const [currentQuote, setCurrentQuote] = useState(quotes[0]);
+  const [quoteIndex, setQuoteIndex] = useState(0);
   
   useEffect(() => {
-    // Change quotes every 5 seconds
+    // Change quotes every 4 seconds with a fade effect
     const quoteInterval = setInterval(() => {
-      setCurrentQuote(prevQuote => {
-        const currentIndex = quotes.indexOf(prevQuote);
-        return quotes[(currentIndex + 1) % quotes.length];
-      });
-    }, 5000);
+      setQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+    }, 4000);
     
     return () => clearInterval(quoteInterval);
   }, []);
+  
+  // Update the quote with a fade effect
+  useEffect(() => {
+    setCurrentQuote(quotes[quoteIndex]);
+  }, [quoteIndex]);
   
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,7 +50,9 @@ const PaymentVerification = () => {
           clearInterval(timer);
           // In a real app, this would be based on the actual payment verification
           // For this demo, we'll simulate a failed payment
-          navigate('/payment/failed');
+          setTimeout(() => {
+            navigate('/payment/failed');
+          }, 1000);
           return 100;
         }
         
@@ -85,8 +91,8 @@ const PaymentVerification = () => {
           {/* Animated progress circle */}
           <div className="flex justify-center my-6">
             <div className="relative w-32 h-32">
-              {/* Outer circle */}
-              <svg className="w-full h-full" viewBox="0 0 100 100">
+              {/* Animated circle with gradient */}
+              <svg className="w-full h-full animate-spin-slow" viewBox="0 0 100 100">
                 <circle 
                   className="text-slate-200" 
                   strokeWidth="8"
@@ -126,16 +132,22 @@ const PaymentVerification = () => {
           </div>
           
           <div className="space-y-3">
-            <p className="text-center text-sm italic text-muted-foreground">{currentQuote}</p>
+            <p className="text-center text-sm italic text-muted-foreground transition-opacity duration-500">{currentQuote}</p>
             
-            {/* Verification steps */}
+            {/* Verification steps with animation */}
             <div className="space-y-2 bg-slate-50 p-4 rounded-lg">
               {verificationSteps.map((step, index) => (
-                <div key={index} className="flex items-center">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 
-                    ${index <= currentStep 
+                <div 
+                  key={index} 
+                  className={`flex items-center transition-all duration-300 ease-in-out
+                    ${index <= currentStep ? 'opacity-100' : 'opacity-50'}`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 transition-colors duration-500
+                    ${index < currentStep 
                       ? 'bg-theme-primary text-white' 
-                      : 'bg-slate-200 text-slate-400'}`}>
+                      : index === currentStep 
+                        ? 'bg-theme-primary/60 text-white animate-pulse' 
+                        : 'bg-slate-200 text-slate-400'}`}>
                     {index < currentStep ? (
                       <Check className="h-4 w-4" />
                     ) : (
@@ -150,9 +162,15 @@ const PaymentVerification = () => {
             </div>
           </div>
 
-          <p className="text-center text-xs text-muted-foreground mt-4">
-            Estimated time: 30 seconds
-          </p>
+          <div className="flex justify-between items-center text-xs text-muted-foreground mt-4">
+            <span>Processing...</span>
+            <span>Estimated time: 30 seconds</span>
+          </div>
+          
+          {/* Progress bar at the bottom */}
+          <div className="mt-2">
+            <Progress value={progress} className="h-1" />
+          </div>
         </CardContent>
       </Card>
     </div>

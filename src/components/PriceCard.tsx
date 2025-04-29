@@ -56,7 +56,7 @@ const PriceCard = ({
     };
     
     const details = planDetails[country];
-    setCurrentPlanDetails(details);
+    setCurrentPlanDetails({...details, country});
   };
 
   const getUsdPrice = (planId: string) => {
@@ -74,6 +74,7 @@ const PriceCard = ({
     platformFee: number;
     currency: string;
     totalAmount: number;
+    country?: 'india' | 'international';
   } | null>(null);
 
   const handleConfirmPlan = () => {
@@ -85,7 +86,8 @@ const PriceCard = ({
         planId: id, 
         planTitle: title, 
         ...currentPlanDetails,
-        modelId 
+        modelId,
+        paymentCountry: currentPlanDetails.country 
       } 
     });
   };

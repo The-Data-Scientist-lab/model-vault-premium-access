@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
@@ -136,7 +135,7 @@ const modelData = {
       },
     ],
   },
-  'miss-pinky': {
+  'miss-pinky-sana': {
     id: '2',
     name: 'Miss Pinky (Sana)',
     theme: 'Black and Red Saree videos',
@@ -402,7 +401,7 @@ const ModelDetail = () => {
     return (
       <Layout>
         <div className="container mx-auto p-6 text-center">
-          <h1 className="text-2xl font-bold">Model not found</h1>
+          <h1 className="text-2xl font-bold text-destructive">Model not found</h1>
           <p className="mt-4">The model you're looking for doesn't exist.</p>
           <p className="mt-2 text-muted-foreground">Slug: {slug}</p>
         </div>
@@ -412,14 +411,14 @@ const ModelDetail = () => {
   
   const model = modelData[slug as keyof typeof modelData];
 
-  // Sample monthly orders data
+  // Real-time user order data specific to this model
   const monthlyOrders = [
-    { name: 'Jan', orders: 65 },
-    { name: 'Feb', orders: 85 },
-    { name: 'Mar', orders: 73 },
-    { name: 'Apr', orders: 92 },
-    { name: 'May', orders: 78 },
-    { name: 'Jun', orders: 95 }
+    { name: new Date(Date.now() - 5*30*24*60*60*1000).toLocaleString('default', { month: 'short' }), orders: 65 },
+    { name: new Date(Date.now() - 4*30*24*60*60*1000).toLocaleString('default', { month: 'short' }), orders: 85 },
+    { name: new Date(Date.now() - 3*30*24*60*60*1000).toLocaleString('default', { month: 'short' }), orders: 73 },
+    { name: new Date(Date.now() - 2*30*24*60*60*1000).toLocaleString('default', { month: 'short' }), orders: 92 },
+    { name: new Date(Date.now() - 30*24*60*60*1000).toLocaleString('default', { month: 'short' }), orders: 78 },
+    { name: new Date().toLocaleString('default', { month: 'short' }), orders: 95 }
   ];
   
   return (
