@@ -15,6 +15,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<'upi' | 'binance'>('upi');
   
   const { planTitle, planPrice, usdPrice, platformFee, usdPlatformFee, totalAmount, usdTotalAmount, modelId } = 
@@ -31,7 +32,15 @@ const PaymentPage = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      
+      // Create a preview URL for the selected image
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -48,58 +57,74 @@ const PaymentPage = () => {
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-2xl">
-      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6">Complete Your Payment</h1>
+      <h1 className="text-2xl md:text-3xl font-bold text-center mb-6 gradient-text">Complete Your Payment</h1>
       
       <Tabs defaultValue={paymentMethod} className="w-full" onValueChange={(value) => setPaymentMethod(value as 'upi' | 'binance')}>
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="upi">Indian Payment (UPI)</TabsTrigger>
           <TabsTrigger value="binance">International (Binance)</TabsTrigger>
         </TabsList>
         
         <TabsContent value="upi" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>UPI Payment</CardTitle>
+          <Card className="border-none shadow-lg bg-gradient-to-br from-slate-50 to-slate-100">
+            <CardHeader className="bg-gradient-to-r from-theme-primary/10 to-theme-accent/10 rounded-t-lg">
+              <CardTitle className="gradient-text">UPI Payment</CardTitle>
               <CardDescription>
                 Scan the QR code or pay to UPI ID: {MERCHANT_UPI_ID}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6 pt-6">
               <div className="flex flex-col items-center justify-center">
-                <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center mb-4 bg-card">
+                <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center mb-4 bg-card shadow-inner">
                   <img 
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${generateQRCodeUrl(MERCHANT_UPI_ID, totalAmount, `Payment for ${planTitle}`)}`} 
                     alt="Payment QR Code" 
-                    className="max-w-full h-auto" 
+                    className="max-w-full h-auto rounded-md" 
                   />
                 </div>
-                <p className="text-center mb-4">Pay <span className="font-bold">₹{totalAmount}</span></p>
-                <p className="text-sm text-muted-foreground mb-6">
+                <div className="bg-theme-primary/10 px-4 py-2 rounded-full">
+                  <p className="text-center font-medium">Pay <span className="font-bold text-theme-primary">₹{totalAmount}</span></p>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
                   (₹{planPrice} + ₹{platformFee} platform fee)
                 </p>
               </div>
               
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-medium">Payment Instructions:</h3>
-                  <ol className="list-decimal list-inside space-y-1 text-sm">
+                  <h3 className="font-medium text-theme-primary">Payment Instructions:</h3>
+                  <ol className="list-decimal list-inside space-y-1 text-sm bg-slate-50 p-4 rounded-lg border border-slate-100">
                     <li>Open your UPI app (Google Pay, PhonePe, etc.)</li>
-                    <li>Scan QR code or pay to UPI ID: {MERCHANT_UPI_ID}</li>
-                    <li>Enter amount: ₹{totalAmount}</li>
+                    <li>Scan QR code or pay to UPI ID: <span className="font-medium">{MERCHANT_UPI_ID}</span></li>
+                    <li>Enter amount: <span className="font-medium">₹{totalAmount}</span></li>
                     <li>Complete payment and take a screenshot</li>
                     <li>Upload screenshot below</li>
                   </ol>
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">Upload Payment Screenshot</label>
+                <div className="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                  <label className="block text-sm font-medium text-theme-primary">Upload Payment Screenshot</label>
                   <Input
                     type="file"
                     onChange={handleFileChange}
                     accept="image/*"
                     className="cursor-pointer"
                   />
-                  {selectedFile && (
+                  
+                  {previewUrl && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">Screenshot Preview:</p>
+                      <div className="border rounded-md overflow-hidden max-h-48 flex items-center justify-center bg-white">
+                        <img 
+                          src={previewUrl} 
+                          alt="Payment Screenshot" 
+                          className="max-h-48 max-w-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedFile && !previewUrl && (
                     <p className="text-sm text-green-500">
                       Selected: {selectedFile.name}
                     </p>
@@ -107,7 +132,7 @@ const PaymentPage = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="bg-gradient-to-r from-theme-primary/5 to-theme-accent/5 rounded-b-lg">
               <Button 
                 className="w-full bg-theme-primary hover:bg-theme-primary/90"
                 disabled={!selectedFile}
@@ -120,48 +145,64 @@ const PaymentPage = () => {
         </TabsContent>
         
         <TabsContent value="binance" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Binance Payment</CardTitle>
+          <Card className="border-none shadow-lg bg-gradient-to-br from-slate-50 to-slate-100">
+            <CardHeader className="bg-gradient-to-r from-theme-primary/10 to-theme-accent/10 rounded-t-lg">
+              <CardTitle className="gradient-text">Binance Payment</CardTitle>
               <CardDescription>
                 Complete your payment through Binance
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6 pt-6">
               <div className="flex flex-col items-center justify-center">
-                <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center mb-4 bg-card">
+                <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center mb-4 bg-card shadow-inner">
                   {/* Placeholder for Binance QR code/details */}
                   <div className="h-48 w-48 flex items-center justify-center bg-muted/30 rounded">
                     <p className="text-center text-sm">Binance Payment Details</p>
                   </div>
                 </div>
-                <p className="text-center mb-4">Pay <span className="font-bold">${usdTotalAmount}</span></p>
-                <p className="text-sm text-muted-foreground mb-6">
+                <div className="bg-theme-primary/10 px-4 py-2 rounded-full">
+                  <p className="text-center font-medium">Pay <span className="font-bold text-theme-primary">${usdTotalAmount}</span></p>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
                   (${usdPrice} + ${usdPlatformFee} platform fee)
                 </p>
               </div>
               
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <h3 className="font-medium">Payment Instructions:</h3>
-                  <ol className="list-decimal list-inside space-y-1 text-sm">
+                  <h3 className="font-medium text-theme-primary">Payment Instructions:</h3>
+                  <ol className="list-decimal list-inside space-y-1 text-sm bg-slate-50 p-4 rounded-lg border border-slate-100">
                     <li>Open your Binance app</li>
                     <li>Enter the provided Binance details</li>
-                    <li>Enter amount: ${usdTotalAmount}</li>
+                    <li>Enter amount: <span className="font-medium">${usdTotalAmount}</span></li>
                     <li>Complete payment and take a screenshot</li>
                     <li>Upload screenshot below</li>
                   </ol>
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium">Upload Payment Screenshot</label>
+                <div className="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                  <label className="block text-sm font-medium text-theme-primary">Upload Payment Screenshot</label>
                   <Input
                     type="file"
                     onChange={handleFileChange}
                     accept="image/*"
                     className="cursor-pointer"
                   />
-                  {selectedFile && (
+                  
+                  {previewUrl && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium mb-2">Screenshot Preview:</p>
+                      <div className="border rounded-md overflow-hidden max-h-48 flex items-center justify-center bg-white">
+                        <img 
+                          src={previewUrl} 
+                          alt="Payment Screenshot" 
+                          className="max-h-48 max-w-full object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {selectedFile && !previewUrl && (
                     <p className="text-sm text-green-500">
                       Selected: {selectedFile.name}
                     </p>
@@ -169,7 +210,7 @@ const PaymentPage = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="bg-gradient-to-r from-theme-primary/5 to-theme-accent/5 rounded-b-lg">
               <Button 
                 className="w-full bg-theme-primary hover:bg-theme-primary/90"
                 disabled={!selectedFile}

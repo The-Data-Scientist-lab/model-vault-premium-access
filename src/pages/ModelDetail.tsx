@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import PriceCard from '@/components/PriceCard';
@@ -403,6 +404,7 @@ const ModelDetail = () => {
         <div className="container mx-auto p-6 text-center">
           <h1 className="text-2xl font-bold">Model not found</h1>
           <p className="mt-4">The model you're looking for doesn't exist.</p>
+          <p className="mt-2 text-muted-foreground">Slug: {slug}</p>
         </div>
       </Layout>
     );
