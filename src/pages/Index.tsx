@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import ModelCard from '@/components/ModelCard';
+import { Users, ShieldCheck, Calendar, TrendingUp } from 'lucide-react';
 
 const Index = () => {
   // Mock data - in a real app this would come from an API
@@ -39,44 +39,61 @@ const Index = () => {
       image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
     },
   ];
+  
+  // Website statistics for the hero section
+  const websiteStats = [
+    { icon: <Calendar className="h-7 w-7 text-theme-primary" />, value: "Since 2020", label: "Verified Reseller" },
+    { icon: <Users className="h-7 w-7 text-theme-primary" />, value: "1,500,000+", label: "Satisfied Users" },
+    { icon: <ShieldCheck className="h-7 w-7 text-theme-primary" />, value: "100%", label: "Secure Payments" },
+    { icon: <TrendingUp className="h-7 w-7 text-theme-primary" />, value: "99.9%", label: "Success Rate" },
+  ];
 
   return (
     <div className="min-h-screen">
-      {/* Header Section */}
-      <header className="relative py-20 md:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-theme-secondary/50 z-10" />
-        <div 
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5')] bg-cover bg-center"
-          style={{ filter: 'brightness(0.3)' }}
-        />
-        
-        <div className="container max-w-6xl mx-auto px-4 relative z-20">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Premium <span className="gradient-text">Quality Content</span> From Verified Models
+      {/* Statistics Header Section */}
+      <header className="bg-slate-50 py-20 md:py-24">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Premium <span className="gradient-text">Quality Content</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl">
-              Access exclusive high-quality 4K content from our carefully selected models. 
-              100% satisfaction guaranteed with secure payment options.
-            </p>
             
-            <div className="flex flex-wrap gap-4">
-              <Button 
-                size="lg" 
-                className="bg-theme-primary hover:bg-theme-primary/90"
-                asChild
-              >
-                <a href="#featured-models">Explore Models</a>
-              </Button>
-              
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-theme-primary text-theme-primary hover:bg-theme-primary/10"
-              >
-                Learn More
-              </Button>
+            <div className="bg-white p-4 rounded-lg mb-8 border border-slate-200 shadow-sm">
+              <p className="text-slate-700 text-sm md:text-base font-medium">
+                <span className="font-bold">Disclaimer:</span> We are not the owners of these original videos. 
+                We are just reselling them at very low prices.
+              </p>
             </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {websiteStats.map((stat, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-sm p-6 text-center transition-all hover:shadow-md border border-slate-100">
+                <div className="mx-auto inline-flex items-center justify-center rounded-full bg-slate-100 w-14 h-14 mb-4">
+                  {stat.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-slate-800">{stat.value}</h3>
+                <p className="text-slate-500">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
+            <Button 
+              size="lg" 
+              className="bg-theme-primary hover:bg-theme-primary/90"
+              asChild
+            >
+              <a href="#featured-models">Explore Models</a>
+            </Button>
+            
+            <Button 
+              size="lg" 
+              variant="outline"
+              className="border-theme-primary text-theme-primary hover:bg-theme-primary/10"
+            >
+              Learn More
+            </Button>
           </div>
         </div>
       </header>
