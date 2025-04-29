@@ -14,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
     
-    --primary: 222 47% 11%;
+    --primary: 222 47% 20%;
     --primary-foreground: 210 40% 98%;
     
     --secondary: 210 40% 96.1%;
@@ -23,8 +23,8 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     
-    --accent: 346 100% 60%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 210 40% 90%;
+    --accent-foreground: 222 47% 20%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -33,12 +33,12 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222 47% 11%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --theme-primary: #FF3366;
+    --theme-primary: #2C3E50;
     --theme-secondary: #F8F9FA;
-    --theme-accent: #FFD700;
-    --theme-dark: #343A40;
+    --theme-accent: #3498DB;
+    --theme-dark: #1A1F2C;
     --theme-light: #F8F9FA;
   }
 }
@@ -52,7 +52,7 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   ::selection {
-    @apply bg-theme-primary/30 text-foreground;
+    @apply bg-theme-primary/20 text-foreground;
   }
 }
 
@@ -62,7 +62,7 @@
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-theme-primary/20 hover:scale-[1.02];
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-theme-accent/10 hover:scale-[1.02];
   }
   
   .soft-shadow {

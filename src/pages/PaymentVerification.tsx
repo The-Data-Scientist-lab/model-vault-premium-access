@@ -80,21 +80,21 @@ const PaymentVerification = () => {
   
   return (
     <div className="container mx-auto p-4 h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-      <Card className="w-full max-w-md border-none shadow-lg bg-white">
+      <Card className="w-full max-w-md border border-slate-200 shadow-md bg-white">
         <CardHeader className="text-center pb-2">
-          <CardTitle className="text-2xl gradient-text">Verifying Your Payment</CardTitle>
-          <p className="text-muted-foreground mt-1">
+          <CardTitle className="text-2xl text-slate-800">Verifying Your Payment</CardTitle>
+          <p className="text-slate-600 mt-1">
             Please wait while we process your transaction
           </p>
         </CardHeader>
         <CardContent className="space-y-6 pt-4">
-          {/* Animated progress circle */}
+          {/* Clean, elegant progress circle */}
           <div className="flex justify-center my-6">
             <div className="relative w-32 h-32">
-              {/* Animated circle with gradient */}
-              <svg className="w-full h-full animate-spin-slow" viewBox="0 0 100 100">
+              {/* Simple circle with clean design */}
+              <svg className="w-full h-full" viewBox="0 0 100 100">
                 <circle 
-                  className="text-slate-200" 
+                  className="text-slate-100" 
                   strokeWidth="8"
                   stroke="currentColor" 
                   fill="transparent" 
@@ -103,39 +103,33 @@ const PaymentVerification = () => {
                   cy="50" 
                 />
                 <circle 
-                  className="text-theme-primary" 
+                  className="text-slate-700" 
                   strokeWidth="8" 
                   strokeDasharray={264}
                   strokeDashoffset={264 - (progress / 100) * 264}
                   strokeLinecap="round" 
-                  stroke="url(#gradient)" 
+                  stroke="currentColor" 
                   fill="transparent" 
                   r="42" 
                   cx="50" 
                   cy="50" 
                 />
-                <defs>
-                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#FF3366" />
-                    <stop offset="100%" stopColor="#FFD700" />
-                  </linearGradient>
-                </defs>
               </svg>
               {/* Inner content */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-                <span className="text-2xl font-bold">{Math.round(progress)}%</span>
+                <span className="text-2xl font-bold text-slate-800">{Math.round(progress)}%</span>
                 <div className="mt-1">
-                  <Loader className="h-6 w-6 text-theme-primary animate-spin mx-auto" />
+                  <Loader className="h-6 w-6 text-slate-600 animate-spin mx-auto" />
                 </div>
               </div>
             </div>
           </div>
           
           <div className="space-y-3">
-            <p className="text-center text-sm italic text-muted-foreground transition-opacity duration-500">{currentQuote}</p>
+            <p className="text-center text-sm italic text-slate-500 transition-opacity duration-500">{currentQuote}</p>
             
-            {/* Verification steps with animation */}
-            <div className="space-y-2 bg-slate-50 p-4 rounded-lg">
+            {/* Clean verification steps with subtle animation */}
+            <div className="space-y-2 bg-slate-50 p-4 rounded-lg border border-slate-100">
               {verificationSteps.map((step, index) => (
                 <div 
                   key={index} 
@@ -144,9 +138,9 @@ const PaymentVerification = () => {
                 >
                   <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 transition-colors duration-500
                     ${index < currentStep 
-                      ? 'bg-theme-primary text-white' 
+                      ? 'bg-slate-700 text-white' 
                       : index === currentStep 
-                        ? 'bg-theme-primary/60 text-white animate-pulse' 
+                        ? 'bg-slate-500 text-white animate-pulse' 
                         : 'bg-slate-200 text-slate-400'}`}>
                     {index < currentStep ? (
                       <Check className="h-4 w-4" />
@@ -154,7 +148,7 @@ const PaymentVerification = () => {
                       <span className="text-xs">{index + 1}</span>
                     )}
                   </div>
-                  <span className={`text-sm ${index <= currentStep ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  <span className={`text-sm ${index <= currentStep ? 'text-slate-800' : 'text-slate-400'}`}>
                     {step}
                   </span>
                 </div>
@@ -162,14 +156,14 @@ const PaymentVerification = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-xs text-muted-foreground mt-4">
+          <div className="flex justify-between items-center text-xs text-slate-500 mt-4">
             <span>Processing...</span>
             <span>Estimated time: 30 seconds</span>
           </div>
           
-          {/* Progress bar at the bottom */}
+          {/* Clean, simple progress bar at the bottom */}
           <div className="mt-2">
-            <Progress value={progress} className="h-1" />
+            <Progress value={progress} className="h-1 bg-slate-100" />
           </div>
         </CardContent>
       </Card>

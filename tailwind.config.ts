@@ -63,13 +63,13 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom theme colors
+				// Updated theme colors with a clean professional palette
 				theme: {
-					primary: '#FF3366',  // Vibrant red
-					secondary: '#1A1A2E', // Dark blue-black
-					accent: '#FFD700',    // Gold
-					dark: '#121212',      // Deep dark
-					light: '#F8F8F8'      // Light gray
+					primary: '#2C3E50',  // Dark slate blue
+					secondary: '#F8F9FA', // Light gray
+					accent: '#3498DB',    // Blue
+					dark: '#1A1F2C',      // Deep dark
+					light: '#F8F9FA'      // Light gray
 				}
 			},
 			borderRadius: {
